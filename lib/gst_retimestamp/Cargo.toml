@@ -1,0 +1,22 @@
+[package]
+name = "gst-retimestamp"
+version = "0.1.0"
+authors = ["Markus Ebner <hiwatari.seiji@gmail.com>"]
+license = "MIT OR Apache-2.0"
+edition = "2021"
+description = "GStreamer Retimestamp plugin"
+
+[dependencies]
+gst = { package = "gstreamer", version = "0.20" }
+gst-base = { package = "gstreamer-base", version = "0.20" }
+gst-video = { package = "gstreamer-video", version = "0.20" }
+gst-audio = { package = "gstreamer-audio", version = "0.20" }
+once_cell = "1.0"
+
+[lib]
+name = "gstretimestamp"
+#crate-type = ["cdylib", "rlib"]
+path = "src/lib.rs"
+
+[build-dependencies]
+gst-plugin-version-helper = { git = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs" }

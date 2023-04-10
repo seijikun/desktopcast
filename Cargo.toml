@@ -1,0 +1,20 @@
+[package]
+name = "desktopcast"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1"
+ashpd = "0"
+tokio = { version = "1", features = ["full"] }
+upnp-client = "^0.1.8"
+futures-util = "0"
+gstreamer = { version = "0", features = ["v1_20"] }
+gstreamer-rtsp-server = { version = "0", features = ["v1_20"] }
+get_if_addrs = "0"
+x11rb = { version = "0", features = ["randr"] }
+
+gst-retimestamp = { path = "lib/gst_retimestamp" }
