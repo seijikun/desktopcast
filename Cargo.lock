@@ -682,6 +682,7 @@ dependencies = [
  "gst-retimestamp",
  "gstreamer",
  "gstreamer-rtsp-server",
+ "num_cpus",
  "tokio",
  "upnp-client",
  "x11rb",

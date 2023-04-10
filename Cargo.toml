@@ -16,5 +16,6 @@ gstreamer = "0"
 gstreamer-rtsp-server = "0"
 get_if_addrs = "0"
 x11rb = { version = "0", features = ["randr"] }
+num_cpus = "1"
 
 gst-retimestamp = { path = "lib/gst_retimestamp" }

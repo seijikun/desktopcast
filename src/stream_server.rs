@@ -135,6 +135,8 @@ impl StreamServer {
     }
 
     pub async fn start(&mut self, config: &DesktopCastConfig) -> Result<()> {
+        let nproc = num_cpus::get();
+
         let mounts = self
             .server
             .mount_points()
@@ -151,11 +153,14 @@ impl StreamServer {
         pipeline_str += &format!(" {} ! queue", video_source);
         if let Some(rescale_res) = &config.target_resolution {
             pipeline_str += &format!(
-                " ! videoscale ! video/x-raw,width={},height={}",
-                rescale_res.width, rescale_res.height
+                " ! videoscale n-threads={} ! video/x-raw,width={},height={}",
+                nproc, rescale_res.width, rescale_res.height
             );
         }
-        pipeline_str += " ! videoconvert ! queue leaky=2 ! x264enc threads=8 tune=zerolatency speed-preset=2 bframes=0 ! video/x-h264,profile=high ! queue ! rtph264pay name=pay0 pt=96";
+        pipeline_str += &format!(
+            " ! videoconvert ! queue leaky=2 ! x264enc threads={} tune=zerolatency speed-preset=2 bframes=0 ! video/x-h264,profile=high ! queue ! rtph264pay name=pay0 pt=96",
+            nproc
+        );
         // AUDIO
         pipeline_str += &format!(" {} ! queue ! audioconvert ! audioresample ! queue leaky=2 ! vorbisenc ! queue ! rtpvorbispay name=pay1 pt=97", audio_source);
 
