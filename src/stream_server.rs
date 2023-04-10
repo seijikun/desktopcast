@@ -63,7 +63,7 @@ impl VideoSourceHelper {
             .ok_or_else(|| anyhow!("Failed to retrieve primary monitor!"))?;
 
         Ok(format!(
-            "startx={} starty={} endx={} endy={}",
+            "startx={} starty={} endx={} endy={} use-damage=0",
             primary_monitor.x,
             primary_monitor.y,
             primary_monitor
@@ -84,7 +84,7 @@ impl VideoSourceHelper {
         } else if let Ok(ximagesrc_args) = VideoSourceHelper::get_x11_options() {
             Ok(format!("ximagesrc {}", ximagesrc_args))
         } else {
-            Ok("ximagesrc".to_string())
+            Ok("ximagesrc use-damage=0".to_string())
         }
     }
 }
