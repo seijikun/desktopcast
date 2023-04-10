@@ -80,7 +80,7 @@ impl VideoSourceHelper {
         // then try x11 primary monitor
         // then fall back to x11 entire screen
         if let Ok(pipewire_id) = VideoSourceHelper::get_pipewire_stream_id().await {
-            Ok(format!("pipewiresrc do-timestamp=true keepalive-time=42 path={} ! retimestamp", pipewire_id))
+            Ok(format!("pipewiresrc do-timestamp=true keepalive-time=100 path={} ! retimestamp", pipewire_id))
         } else if let Ok(ximagesrc_args) = VideoSourceHelper::get_x11_options() {
             Ok(format!("ximagesrc {}", ximagesrc_args))
         } else {
