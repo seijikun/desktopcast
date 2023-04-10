@@ -164,7 +164,6 @@ impl StreamServer {
         factory.set_latency(1500);
         factory.set_retransmission_time(ClockTime::from_mseconds(2500));
         factory.set_stop_on_disconnect(true);
-        factory.set_enable_rtcp(true);
 
         factory.connect_media_constructed({
             let main_loop = self.main_loop.clone();
