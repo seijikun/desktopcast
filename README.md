@@ -1,6 +1,6 @@
 # desktopcast
 
-Desktopcast is a little CLI application that allows you to cast your Linux desktop to a Kodi instance via UPNP/DLNA remote using the RTSP streaming protocol.
+Desktopcast is a little CLI application that allows you to cast your Linux desktop to any UPNP/DLNA device capable of the AVTransfer service, like Kodi using the RTSP streaming protocol.
 
 At the moment, desktopcast is pretty much tailored to my use-case, which is casting my desktop to Kodi. Though is supports both X11 and Wayland (.. if your window manager properly supports Wayland).
 
@@ -8,8 +8,8 @@ At the moment, desktopcast is pretty much tailored to my use-case, which is cast
 GStreamer is used to create an `rtsp://` server.
 This server is fed from a pipeline that captures your desktop as well as your current audio output (the sound that other applications output to your speakers) and forwards this to any client connecting to the server. This server is reachable under `rtsp://<yourip>:8554`.
 
-As soon as this server is setup, the uri under which this server can be reached within your local network is sent to the first Kodi instance Desktopcast finds via UPNP/DLNA.
-Kodi then connects to the rtsp server and displays the stream sent to it via the GStreamer pipeline.
+As soon as this server is setup, the uri under which this server can be reached within your local network is sent to all reachable UPNP/DLNA AVTransfer-capable devices that are found within 5 seconds.
+These devices then connect to the rtsp server that desktopcast hosts and displays the stream sent to them via the GStreamer pipeline.
 
 ### Screencapture
 To specify what should be screencaptured and cast, desktopcast attempts to use `xdg-desktop-portal`, which requires pipewire.

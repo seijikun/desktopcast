@@ -1,4 +1,4 @@
-use std::thread;
+use std::thread::{self, JoinHandle};
 
 use anyhow::{anyhow, Result};
 use ashpd::{
@@ -124,6 +124,7 @@ impl AudioSourceHelper {
 pub struct StreamServer {
     main_loop: glib::MainLoop,
     server: gst_rtsp_server::RTSPServer,
+    worker_thread: Option<JoinHandle<()>>
 }
 impl StreamServer {
     pub fn new() -> Self {
@@ -131,7 +132,7 @@ impl StreamServer {
         let server = gst_rtsp_server::RTSPServer::new();
         server.set_backlog(1);
 
-        Self { main_loop, server }
+        Self { main_loop, server, worker_thread: None }
     }
 
     pub async fn start(&mut self, config: &DesktopCastConfig) -> Result<()> {
@@ -165,7 +166,7 @@ impl StreamServer {
         pipeline_str += &format!(" {} ! queue ! audioconvert ! audioresample ! queue leaky=2 ! vorbisenc ! queue ! rtpvorbispay name=pay1 pt=97", audio_source);
 
         factory.set_launch(&format!("( {} )", pipeline_str));
-        factory.set_shared(false);
+        factory.set_shared(true);
         factory.set_latency(1500);
         factory.set_retransmission_time(ClockTime::from_mseconds(2500));
         factory.set_stop_on_disconnect(true);
@@ -204,21 +205,24 @@ impl StreamServer {
 
         mounts.add_factory("/", factory);
 
-        Ok(())
-    }
-
-    pub fn run(&mut self) -> Result<()> {
         let _id = self.server.attach(None)?;
-        let worker_thread = thread::spawn({
+        self.worker_thread = Some(thread::spawn({
             let main_loop = self.main_loop.clone();
             move || {
                 main_loop.run();
             }
-        });
+        }));
+
+        Ok(())
+    }
+
+    pub fn run(&mut self) -> Result<()> {
+        let worker_thread = self.worker_thread
+            .take()
+            .expect("Either run() was called twice, or run() was called before start()");
         worker_thread
             .join()
             .map_err(|e| anyhow!("StreamServer crashed: {:?}", e))?;
-        //TODO
         Ok(())
     }
 }

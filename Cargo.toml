@@ -10,7 +10,6 @@ license = "MIT OR Apache-2.0"
 anyhow = "1"
 ashpd = "0"
 tokio = { version = "1", features = ["full"] }
-upnp-client = "^0.1.8"
 futures-util = "0"
 gstreamer = "0"
 gstreamer-rtsp-server = "0"
@@ -19,3 +18,5 @@ x11rb = { version = "0", features = ["randr"] }
 num_cpus = "1"
 
 gst-retimestamp = { path = "lib/gst_retimestamp" }
+
+upnp-client = { git = "https://github.com/seijikun/upnp-client-rs.git", rev = "b4859dc1190fffac39b9fe22d2d8d0fd1b959b5b" }

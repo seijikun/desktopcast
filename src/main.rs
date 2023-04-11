@@ -32,7 +32,7 @@ async fn main() -> Result<()> {
     stream_server.start(&config).await?;
 
     let own_ip = get_own_ip()?;
-    upnp::start_on_kodi(&format!("rtsp://{}:8554", own_ip)).await?;
+    upnp::start_via_upnp(&format!("rtsp://{}:8554", own_ip)).await?;
 
     stream_server.run()?;
 
